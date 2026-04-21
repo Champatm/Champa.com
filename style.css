@@ -94,7 +94,7 @@ right:300px;
 
 /* Hero Section */
 .hero {
-    height: 60vh;
+    height: 80vh;
     background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
                 url('https://images.pexels.com/photos/159306/construction-site-build-construction-work-159306.jpeg') center/cover;
     display: flex;
