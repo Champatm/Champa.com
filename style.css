@@ -9,50 +9,89 @@
 body {
     background-color: #f4f4f4; 
 }
-
-/* Navigation */
+/* --- DESKTOP NAVIGATION (Default) --- */
 .navbar {
-    display: flex; /* Flexbox for horizontal layout of nav items */
-    position: relative;
-    top: 0px;
-    left: 0px;
-    height: 65px;
-    justify-content: space-between; 
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    padding: 15px 5%;
+    padding: 10px 5%;
     background-color: maroon;
     color: white;
     position: sticky;
     top: 0;
     z-index: 1000;
+    min-height: 80px;
 }
 
-#company-name {
-    font-size: 18px;
-    font-weight: bold;
+.brand-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+}
+
+.nav-links a {
     color: white;
-    position: absolute;
-    top: 37px; /* Adjust as needed to position below the logo */
-    left: 5%; /* Align with logo */
+    text-decoration: none;
+    font-weight: bold;
 }
 
-.logo { font-size: 24px;
-       font-weight: bold; 
-       position: absolute;
-       top :10px;
-      left: 5%; 
+/* --- MOBILE RESPONSIVE FIX --- */
+@media screen and (max-width: 768px) {
+    .navbar {
+        flex-direction: column; /* Stacks brand above links */
+        padding: 15px 5%;
+        height: auto;
+    }
+
+    .brand-container {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .logo {
+        font-size: 22px;
+    }
+
+    #company-name {
+        font-size: 14px;
+    }
+
+    /* Links and Cart in one row at the bottom */
+    .nav-links {
+        width: 100%;
+        justify-content: center;
+        gap: 15px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .nav-links li {
+        margin: 0; /* Clears that left margin from desktop */
+    }
+
+    .nav-links a {
+        font-size: 13px;
+    }
+
+    .cart-icon {
+        margin-top: 10px;
+    }
+
+    .cart-icon p {
+        font-size: 15px !important;
+    }
+
+    /* Fix Hero section text size for mobile */
+    .hero h1 {
+        font-size: 24px;
+        line-height: 1.2;
+    }
 }
-
-.logo span { color: #ffd700; 
-
-} /* Golden color for 'Art' to pop against Maroon */
-
-.nav-links { display: flex; 
-    list-style: none; }
-    
-    .nav-links li { margin-left: 20px; }
-
-.nav-links a { color: white; text-decoration: none; font-weight: bold; }
 
 
 
