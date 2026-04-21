@@ -5,81 +5,355 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Categories - Divine Art Construction</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* ── PAGE HERO BANNER ── */
+        .page-banner {
+            background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
+                        url('https://images.pexels.com/photos/1109541/pexels-photo-1109541.jpeg') center/cover;
+            height: 220px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+        .page-banner h1 {
+            font-size: 36px;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .page-banner p {
+            font-size: 15px;
+            color: #ddd;
+        }
+
+        /* ── CATEGORY FILTER TABS ── */
+        .filter-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            padding: 30px 5% 10px;
+            background: #fff;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .filter-tab {
+            padding: 8px 20px;
+            border: 2px solid maroon;
+            border-radius: 25px;
+            background: transparent;
+            color: maroon;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .filter-tab:hover,
+        .filter-tab.active {
+            background: maroon;
+            color: white;
+        }
+
+        /* ── CATEGORIES WRAPPER ── */
+        .categories-page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5% 60px;
+        }
+
+        /* ── CATEGORY GROUP ── */
+        .category-group {
+            padding: 40px 0 20px;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .category-group:last-child {
+            border-bottom: none;
+        }
+
+        .group-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .group-title {
+            font-size: 22px;
+            color: maroon;
+            font-weight: bold;
+            border-left: 5px solid #FF8C00;
+            padding-left: 15px;
+            margin: 0;
+        }
+
+        .group-count {
+            background: #f0f0f0;
+            color: #666;
+            font-size: 12px;
+            padding: 3px 10px;
+            border-radius: 20px;
+        }
+
+        /* ── PRODUCT CARDS ── */
+        .products-grid {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .product-card {
+            background: white;
+            width: 240px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            overflow: hidden;
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.14);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: contain;
+            background-color: #f9f9f9;
+            padding: 10px;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .product-card h3 {
+            font-size: 15px;
+            color: #222;
+            margin-bottom: 6px;
+        }
+
+        .product-card .product-desc {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .price {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: maroon;
+            margin-bottom: 12px;
+        }
+
+        .add-to-cart {
+            background-color: maroon;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            font-size: 13px;
+            transition: background-color 0.2s;
+        }
+
+        .add-to-cart:hover {
+            background-color: #6b0000;
+        }
+
+        /* ── EMPTY STATE ── */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #aaa;
+            display: none;
+        }
+
+        .empty-state p {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        /* ── MOBILE ── */
+        @media (max-width: 768px) {
+            .page-banner h1 { font-size: 24px; }
+            .product-card { width: 100%; }
+            .products-grid { flex-direction: column; }
+        }
+    </style>
 </head>
 <body>
 
-    <nav class="navbar">
+<!-- ── NAVBAR (same as index.html) ── -->
+<nav class="navbar">
+    <div class="brand-container">
         <div class="logo">Divine<span>Art</span></div>
-<br>
-<div id="company-name">Construction & Suppliers </div>
+    </div>
 
-        <ul class="nav-links">
-            <li><a href="index.html" id="homelink">Home</a></li>
-            <li><a href="categories.html"  id="categorylink">Categories</a></li>
-            <li><a href="#" id="contactlink">Contact us</a></li>
-        </ul>
- <style>
-.cart-icon {
-cursor: pointer;
- 
-}
-            
-        </style>
-        <div class="cart-icon">
+    <button class="hamburger" id="hamburger-btn" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
 
-           <p  style="font-size: 20px;" >Cart 🛒 <span id="cart-count">0</span></p>
-        </div>
+    <ul class="nav-links" id="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="categories.html">Categories</a></li>
+        <li><a href="#main-footer">Contact</a></li>
+    </ul>
 
-    </nav>
+    <div class="cart-icon">
+        <p>Cart 🛒 <span id="cart-count">0</span></p>
+    </div>
+</nav>
 
 
+<!-- ── PAGE BANNER ── -->
+<div class="page-banner">
+    <h1>Product Categories</h1>
+    <p>Browse our full range of quality construction materials</p>
+</div>
 
 
+<!-- ── FILTER TABS ── -->
+<div class="filter-tabs">
+    <button class="filter-tab active" onclick="filterCategory('all', this)">All</button>
+    <button class="filter-tab" onclick="filterCategory('cement', this)">🏗️ Cement & Masonry</button>
+    <button class="filter-tab" onclick="filterCategory('paints', this)">🎨 Paints & Finishes</button>
+    <button class="filter-tab" onclick="filterCategory('steel', this)">🔩 Steel & Iron</button>
+    <button class="filter-tab" onclick="filterCategory('hardware', this)">🔧 Hardware & Tools</button>
+</div>
 
-    <div class="categories-page-container">
-        <h1 style="text-align: center; margin-top: 30px; color: maroon;">Material Groupings</h1>
 
-        <section class="category-group">
+<!-- ── PRODUCTS ── -->
+<div class="categories-page-container">
+
+    <!-- Cement & Masonry -->
+    <section class="category-group" data-section="cement">
+        <div class="group-header">
             <h2 class="group-title">🏗️ Cement & Masonry</h2>
-            <div class="products-grid">
-                <div class="product-card">
-                    <img src="https://images.pexels.com/photos/29519165/pexels-photo-29519165.jpeg" alt="Bamburi">
-                    <h3>Bamburi Cement</h3>
-                    <p class="price">KSh 750</p>
-                    <button class="add-to-cart">Add to Cart</button>
-                </div>
-                <div class="product-card">
-                    <img src="https://images.pexels.com/photos/29519165/pexels-photo-29519165.jpeg" alt="Simba">
+            <span class="group-count">2 items</span>
+        </div>
+        <div class="products-grid">
+            <div class="product-card" data-category="cement">
+                <img src="https://firebasestorage.googleapis.com/v0/b/aanddstore-product-images/o/products%2FrCVI2mO6mIyKZ1OS5Eau%2Fimages%2F1744693640971_simba.webp?alt=media&token=e0650aac-3d3c-47c0-afb9-1d32819af069" alt="Simba Cement">
+                <div class="card-body">
                     <h3>Simba Cement</h3>
+                    <p class="product-desc">High-quality 50kg bag, ideal for foundations and walls.</p>
                     <p class="price">KSh 730</p>
                     <button class="add-to-cart">Add to Cart</button>
                 </div>
             </div>
-        </section>
+            <div class="product-card" data-category="cement">
+                <img src="https://images.pexels.com/photos/29519165/pexels-photo-29519165.jpeg" alt="Bamburi Cement">
+                <div class="card-body">
+                    <h3>Bamburi Cement</h3>
+                    <p class="product-desc">Kenya's most trusted cement brand. 50kg bag.</p>
+                    <p class="price">KSh 750</p>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <section class="category-group">
+    <!-- Paints & Finishes -->
+    <section class="category-group" data-section="paints">
+        <div class="group-header">
             <h2 class="group-title">🎨 Paints & Finishes</h2>
-            <div class="products-grid">
-                <div class="product-card">
-                    <img src="https://images.pexels.com/photos/6764238/pexels-photo-6764238.jpeg" alt="paints">
+            <span class="group-count">2 items</span>
+        </div>
+        <div class="products-grid">
+            <div class="product-card" data-category="paints">
+                <img src="https://images.pexels.com/photos/6764238/pexels-photo-6764238.jpeg" alt="Crown Paint">
+                <div class="card-body">
                     <h3>Crown Solo White</h3>
+                    <p class="product-desc">Premium interior & exterior emulsion paint. 4L tin.</p>
                     <p class="price">KSh 2,800</p>
                     <button class="add-to-cart">Add to Cart</button>
                 </div>
             </div>
-        </section>
+            <div class="product-card" data-category="paints">
+                <img src="https://images.pexels.com/photos/6764238/pexels-photo-6764238.jpeg" alt="Dulux Paint">
+                <div class="card-body">
+                    <h3>Dulux Weathershield</h3>
+                    <p class="product-desc">Weather-resistant exterior paint. Long lasting finish. 4L.</p>
+                    <p class="price">KSh 3,200</p>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Steel & Iron -->
+    <section class="category-group" data-section="steel">
+        <div class="group-header">
+            <h2 class="group-title">🔩 Steel & Iron</h2>
+            <span class="group-count">2 items</span>
+        </div>
+        <div class="products-grid">
+            <div class="product-card" data-category="steel">
+                <img src="https://images.pexels.com/photos/11891953/pexels-photo-11891953.jpeg" alt="Steel Bars">
+                <div class="card-body">
+                    <h3>Reinforcement Steel Y12</h3>
+                    <p class="product-desc">High tensile steel bars for reinforced concrete structures.</p>
+                    <p class="price">KSh 1,200</p>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+            <div class="product-card" data-category="steel">
+                <img src="https://images.pexels.com/photos/11891953/pexels-photo-11891953.jpeg" alt="Steel Y16">
+                <div class="card-body">
+                    <h3>Reinforcement Steel Y16</h3>
+                    <p class="product-desc">Heavy duty steel for columns and beams. Per 12m bar.</p>
+                    <p class="price">KSh 1,850</p>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hardware & Tools -->
+    <section class="category-group" data-section="hardware">
+        <div class="group-header">
+            <h2 class="group-title">🔧 Hardware & Tools</h2>
+            <span class="group-count">1 item</span>
+        </div>
+        <div class="products-grid">
+            <div class="product-card" data-category="hardware">
+                <img src="https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg" alt="Tools">
+                <div class="card-body">
+                    <h3>Mason's Trowel Set</h3>
+                    <p class="product-desc">Professional grade stainless steel trowel set. 3 pieces.</p>
+                    <p class="price">KSh 850</p>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Empty state (shown when no filter matches) -->
+    <div class="empty-state" id="empty-state">
+        <p>No products found in this category.</p>
     </div>
 
+</div>
 
 
-    
-
+<!-- ── CART SIDEBAR ── -->
 <div id="cart-sidebar" class="sidebar">
     <div class="sidebar-header">
         <h2>Your Cart</h2>
         <button id="close-cart">✕</button>
     </div>
-    
     <div id="cart-items-list">
         <p style="padding: 20px;">Your cart is empty</p>
     </div>
@@ -90,119 +364,154 @@ cursor: pointer;
 </div>
 
 
+<!-- ── FOOTER ── -->
+<style>
+#main-footer {
+  background-color: #000;
+  color: #fff;
+  padding: 60px 20px 20px 20px;
+  font-family: Arial, sans-serif;
+}
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 40px;
+}
+.footer-col h3 { font-size: 14px; color: #fff; margin-bottom: 20px; letter-spacing: 1px; text-transform: uppercase; }
+.footer-col p { font-size: 13px; color: #bbb; line-height: 1.8; }
+.footer-col .phone { font-weight: bold; color: #fff; font-size: 16px; margin-top: 10px; }
+.footer-links { list-style: none; padding: 0; }
+.footer-links li { margin-bottom: 10px; }
+.footer-links a { color: #bbb; text-decoration: none; font-size: 13px; transition: 0.3s; }
+.footer-links a:hover { color: #FF8C00; padding-left: 5px; }
+.social-icons a { display: inline-block; width: 35px; height: 35px; border: 1px solid #555; border-radius: 50%; text-align: center; line-height: 35px; margin-right: 8px; color: #fff; text-decoration: none; font-size: 12px; }
+.footer-bottom { text-align: center; border-top: 1px solid #222; margin-top: 40px; padding-top: 18px; font-size: 12px; color: #666; }
+</style>
+
+<footer id="main-footer">
+    <div class="footer-container">
+        <div class="footer-col">
+            <h3>Divine Art Construction</h3>
+            <p>Your trusted partner in construction and building materials. Quality products, competitive prices, and reliable delivery across Kenya.</p>
+        </div>
+        <div class="footer-col">
+            <h3>Contact Us</h3>
+            <p>Email: info@divineart.co.ke</p>
+            <p>Nairobi, Kenya</p>
+            <p class="phone">+254 700 000 000</p>
+        </div>
+        <div class="footer-col">
+            <h3>Quick Access</h3>
+            <ul class="footer-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="categories.html">Categories</a></li>
+                <li><a href="#main-footer">Contact Us</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h3>Follow Us</h3>
+            <p>Follow us on social media for the latest deals.</p>
+            <div class="social-icons">
+                <a href="#">FB</a>
+                <a href="#">TW</a>
+                <a href="#">IG</a>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; <span id="year"></span> Divine Art Construction & Suppliers LTD | All Rights Reserved | Developed by Lex Corp</p>
+    </div>
+</footer>
+
+
 <script>
+    // ── HAMBURGER ──
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const navLinks = document.getElementById('nav-links');
+
+    hamburgerBtn.addEventListener('click', () => {
+        hamburgerBtn.classList.toggle('open');
+        navLinks.classList.toggle('open');
+    });
+
+    navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            hamburgerBtn.classList.remove('open');
+            navLinks.classList.remove('open');
+        });
+    });
+
+    // ── CART ──
     const cartIcon = document.querySelector('.cart-icon');
     const cartSidebar = document.getElementById('cart-sidebar');
     const closeCart = document.getElementById('close-cart');
     const cartItemsList = document.getElementById('cart-items-list');
     const cartCountElement = document.getElementById('cart-count');
     const cartTotalElement = document.getElementById('cart-total-price');
-    
+
     let cart = [];
 
-    // 1. Open/Close Cart
-    cartIcon.addEventListener('click', () => {
-        cartSidebar.classList.add('active');
-    });
+    cartIcon.addEventListener('click', () => cartSidebar.classList.add('active'));
+    closeCart.addEventListener('click', () => cartSidebar.classList.remove('active'));
 
-    closeCart.addEventListener('click', () => {
-        cartSidebar.classList.remove('active');
-    });
-
-    // 2. The Logic to Add Items
     document.querySelectorAll('.add-to-cart').forEach(button => {
         button.addEventListener('click', () => {
-            const card = button.parentElement;
+            const card = button.closest('.product-card');
             const productName = card.querySelector('h3').innerText;
-            
-            // Get the price text (e.g., "KSh 750")
             const priceText = card.querySelector('.price').innerText;
-            
-            // CLEANING THE PRICE:
-            // This removes "KSh" and "," so "KSh 1,200" becomes "1200"
             const productPrice = parseInt(priceText.replace(/[^\d]/g, ''));
-
-            // Add to our list (array)
             cart.push({ name: productName, price: productPrice });
-            
             updateCartUI();
         });
     });
 
-    // 3. Updating the Sidebar and Total
     function updateCartUI() {
-        // Update the red/maroon count number on the navbar
         cartCountElement.innerText = cart.length;
-
-        // Clear the sidebar so we can redraw it
         cartItemsList.innerHTML = '';
         let totalSum = 0;
 
-        cart.forEach((item) => {
-            // Create a new div for each item
+        cart.forEach(item => {
             const itemDiv = document.createElement('div');
             itemDiv.style.padding = "10px";
             itemDiv.style.borderBottom = "1px solid #eee";
             itemDiv.innerHTML = `<strong>${item.name}</strong><br>KSh ${item.price.toLocaleString()}`;
-            
             cartItemsList.appendChild(itemDiv);
-            
-            // Add this item's price to the running total
             totalSum += item.price;
         });
 
-        // Update the Total Price on the screen
-        // .toLocaleString() adds the commas back for humans to read (e.g., 1,200)
         cartTotalElement.innerText = totalSum.toLocaleString();
 
         if (cart.length === 0) {
             cartItemsList.innerHTML = '<p style="padding:20px;">Your cart is empty</p>';
         }
     }
-</script>
 
+    // ── CATEGORY FILTER ──
+    function filterCategory(category, btn) {
+        // Update active tab
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
 
+        const sections = document.querySelectorAll('.category-group');
+        let anyVisible = false;
 
-<script>
-    const navCategories = document.getElementById('nav-categories');
-    const heroSection = document.querySelector('.hero');
-    const categoriesView = document.getElementById('categories-view');
-    const productSection = document.querySelector('.products-section');
-
-    // 1. When clicking "Categories" in Navbar
-    navCategories.addEventListener('click', (e) => {
-        e.preventDefault(); // Stop page refresh
-        heroSection.style.display = 'none'; // Hide Hero
-        categoriesView.style.display = 'block'; // Show Category Tab
-        
-        // Scroll to the categories view smoothly
-        categoriesView.scrollIntoView({ behavior: 'smooth' });
-    });
-
-    // 2. Function to filter and show products
-    function filterByCategory(category) {
-        // Show the product section in case it was hidden
-        productSection.style.display = 'block';
-        
-        const allProducts = document.querySelectorAll('.product-card');
-        
-        allProducts.forEach(card => {
-            const cardCategory = card.getAttribute('data-category');
-            if (category === 'all' || cardCategory === category) {
-                card.style.display = 'block';
+        sections.forEach(section => {
+            if (category === 'all' || section.dataset.section === category) {
+                section.style.display = 'block';
+                anyVisible = true;
             } else {
-                card.style.display = 'none';
+                section.style.display = 'none';
             }
         });
 
-        // Scroll to products after picking a category
-        productSection.scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('empty-state').style.display = anyVisible ? 'none' : 'block';
     }
+
+    // Footer year
+    document.getElementById('year').innerHTML = new Date().getFullYear();
 </script>
 
-
-
-
-
-    </body>
+</body>
 </html>
