@@ -94,10 +94,15 @@ right:300px;
 
 /* Hero Section */
 .hero {
-    height: 50vh; /* Shorter height for mobile */
-    padding: 20px;
+    height: 60vh;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                url('https://images.pexels.com/photos/159306/construction-site-build-construction-work-159306.jpeg') center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
 }
-
 .hero h1 {
     font-size: 24px; /* Smaller font for mobile */
     line-height: 1.2;
