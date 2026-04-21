@@ -11,10 +11,16 @@
 <nav class="navbar">
     <div class="brand-container">
         <div class="logo">Divine<span>Art</span></div>
-        <div id="company-name">Construction & Suppliers</div>
     </div>
-    
-    <ul class="nav-links">
+
+    <!-- Hamburger button — mobile only -->
+    <button class="hamburger" id="hamburger-btn" aria-label="Toggle menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+
+    <ul class="nav-links" id="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="categories.html">Categories</a></li>
         <li><a href="#main-footer">Contact</a></li>
@@ -24,6 +30,8 @@
         <p>Cart 🛒 <span id="cart-count">0</span></p>
     </div>
 </nav>
+
+
 
 
 <section class="hero">
@@ -74,7 +82,6 @@
 
 
 
-
 <div id="cart-sidebar" class="sidebar">
     <div class="sidebar-header">
         <h2>Your Cart</h2>
@@ -92,6 +99,7 @@
 
 
 <script>
+    // ── CART LOGIC ──
     const cartIcon = document.querySelector('.cart-icon');
     const cartSidebar = document.getElementById('cart-sidebar');
     const closeCart = document.getElementById('close-cart');
@@ -101,7 +109,6 @@
     
     let cart = [];
 
-    // 1. Open/Close Cart
     cartIcon.addEventListener('click', () => {
         cartSidebar.classList.add('active');
     });
@@ -110,98 +117,55 @@
         cartSidebar.classList.remove('active');
     });
 
-    // 2. The Logic to Add Items
     document.querySelectorAll('.add-to-cart').forEach(button => {
         button.addEventListener('click', () => {
             const card = button.parentElement;
             const productName = card.querySelector('h3').innerText;
-            
-            // Get the price text (e.g., "KSh 750")
             const priceText = card.querySelector('.price').innerText;
-            
-            // CLEANING THE PRICE:
-            // This removes "KSh" and "," so "KSh 1,200" becomes "1200"
             const productPrice = parseInt(priceText.replace(/[^\d]/g, ''));
-
-            // Add to our list (array)
             cart.push({ name: productName, price: productPrice });
-            
             updateCartUI();
         });
     });
 
-    // 3. Updating the Sidebar and Total
     function updateCartUI() {
-        // Update the red/maroon count number on the navbar
         cartCountElement.innerText = cart.length;
-
-        // Clear the sidebar so we can redraw it
         cartItemsList.innerHTML = '';
         let totalSum = 0;
 
         cart.forEach((item) => {
-            // Create a new div for each item
             const itemDiv = document.createElement('div');
             itemDiv.style.padding = "10px";
             itemDiv.style.borderBottom = "1px solid #eee";
             itemDiv.innerHTML = `<strong>${item.name}</strong><br>KSh ${item.price.toLocaleString()}`;
-            
             cartItemsList.appendChild(itemDiv);
-            
-            // Add this item's price to the running total
             totalSum += item.price;
         });
 
-        // Update the Total Price on the screen
-        // .toLocaleString() adds the commas back for humans to read (e.g., 1,200)
         cartTotalElement.innerText = totalSum.toLocaleString();
 
         if (cart.length === 0) {
             cartItemsList.innerHTML = '<p style="padding:20px;">Your cart is empty</p>';
         }
     }
-</script>
 
+    // ── HAMBURGER MENU LOGIC ──
+    const hamburgerBtn = document.getElementById('hamburger-btn');
+    const navLinks = document.getElementById('nav-links');
 
-
-<script>
-    const navCategories = document.getElementById('nav-categories');
-    const heroSection = document.querySelector('.hero');
-    const categoriesView = document.getElementById('categories-view');
-    const productSection = document.querySelector('.products-section');
-
-    // 1. When clicking "Categories" in Navbar
-    navCategories.addEventListener('click', (e) => {
-        e.preventDefault(); // Stop page refresh
-        heroSection.style.display = 'none'; // Hide Hero
-        categoriesView.style.display = 'block'; // Show Category Tab
-        
-        // Scroll to the categories view smoothly
-        categoriesView.scrollIntoView({ behavior: 'smooth' });
+    hamburgerBtn.addEventListener('click', () => {
+        hamburgerBtn.classList.toggle('open');
+        navLinks.classList.toggle('open');
     });
 
-    // 2. Function to filter and show products
-    function filterByCategory(category) {
-        // Show the product section in case it was hidden
-        productSection.style.display = 'block';
-        
-        const allProducts = document.querySelectorAll('.product-card');
-        
-        allProducts.forEach(card => {
-            const cardCategory = card.getAttribute('data-category');
-            if (category === 'all' || cardCategory === category) {
-                card.style.display = 'block';
-            } else {
-                card.style.display = 'none';
-            }
+    // Close menu when a nav link is clicked
+    navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            hamburgerBtn.classList.remove('open');
+            navLinks.classList.remove('open');
         });
-
-        // Scroll to products after picking a category
-        productSection.scrollIntoView({ behavior: 'smooth' });
-    }
+    });
 </script>
-
-
 
 
 
@@ -219,7 +183,7 @@
  
 <style>
 #main-footer {
-  background-color: #000; /* Solid black like the image */
+  background-color: #000;
   color: #fff;
   padding: 60px 20px 20px 20px;
   font-family: Arial, sans-serif;
@@ -229,7 +193,6 @@
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  /* Creates 4 equal columns on desktop */
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
   gap: 40px;
 }
@@ -244,7 +207,7 @@
 
 .footer-col p {
   font-size: 14px;
-  color: #bbb; /* Dimmer text for secondary info */
+  color: #bbb;
   line-height: 1.8;
 }
 
@@ -272,7 +235,7 @@
 }
 
 .footer-links a:hover {
-  color: #d2691e; /* Savanna Orange on hover */
+  color: #d2691e;
   padding-left: 5px;
 }
 
@@ -299,74 +262,61 @@
   color: #777;
 }
 
-/* Mobile responsive fix */
 @media (max-width: 600px) {
   .footer-container {
-    grid-template-columns: 1fr; /* Stack columns on phone */
+    grid-template-columns: 1fr;
     text-align: center;
   }
 }
-
 </style>
 
 
 <footer id="main-footer">
   <div class="footer-container">
     <div class="footer-col">
-      <h3>ODYSSEY TOUR & TRAVELS</h3>
-      <p>Your trusted partner in construction and building materials. Quality products, competitive prices, and reliable delivery across Kenya</p>
+      <h3>Divine Art Construction & Suppliers LTD</h3>
+      <p>Your trusted partner in construction and building materials. Quality products, competitive prices, and reliable delivery across Kenya.</p>
     </div>
 
     <div class="footer-col">
-      <h3>KENYA'S LEADING TOUR COMPANY</h3>
-      <p>Email: info@odysseytravel.com</p>
+      <h3>Contact Us</h3>
+      <p>Email: info@divineart.co.ke</p>
       <p>Nairobi, Kenya</p>
-      <p class="phone">PHONE: +254 711 988 988</p>
+      <p class="phone">PHONE: +254 700 000 000</p>
     </div>
 
     <div class="footer-col">
-      <h3>QUICK ACCESS</h3>
+      <h3>Quick Access</h3>
       <ul class="footer-links">
-        <li><a href="Toursdashboard.html">Home</a></li>
-        <li><a href="destinations.php">All Destinations</a></li>
-        <li><a href="maasai-mara.php">Maasai Mara</a></li>
-        <li><a href="contact.php">Contact Us</a></li>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="categories.html">Categories</a></li>
+        <li><a href="#main-footer">Contact Us</a></li>
       </ul>
     </div>
 
     <div class="footer-col">
-      <h3>FOLLOW US</h3>
-      <p>Join thousands of followers on our social platforms for the latest safari deals.</p>
+      <h3>Follow Us</h3>
+      <p>Follow us on social media for the latest deals and updates.</p>
       <div class="social-icons">
         <a href="#">FB</a>
-         <a href="#">TW</a>
+        <a href="#">TW</a>
         <a href="#">IG</a>
-        
       </div>
     </div>
   </div>
 
   <div class="footer-bottom">
-    <p>&copy; <span id="year"></span> Odyssey Travel Companion | All Rights Reserved | Developed by Lex Corp</p>
+    <p>&copy; <span id="year"></span> Divine Art Construction & Suppliers LTD | All Rights Reserved | Developed by Lex Corp</p>
   </div>
 </footer>
 
-
-
-
-
-
 <footer>
-  &copy;  <span id="year"></span> Odyssey Travel Companion <br> Developed by Lex Corp
+  &copy; <span id="year2"></span> Divine Art Construction & Suppliers LTD <br> Developed by Lex Corp
   <script>
-  // Get the current year
-  document.getElementById("year").innerHTML = new Date().getFullYear();
-</script>
-
+    document.getElementById("year").innerHTML = new Date().getFullYear();
+    document.getElementById("year2").innerHTML = new Date().getFullYear();
+  </script>
 </footer>
 
-
-
-</html>
 </body>
 </html>
