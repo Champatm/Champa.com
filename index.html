@@ -76,18 +76,6 @@
             <button class="add-to-cart">Add to Cart</button>
         </div>
 
-<div class="product-card">
-  <img src="https://images.pexels.com/photos/15013713/pexels-photo-15013713.jpeg"    alt="crownpaints">
-  <h3>Crown Permacote with Silicone </h3>
-  <p class="price">KSh 500</p>
-  <button class="add-to-cart">Add to Cart</button>
-
-</div>
-
-
-
-
-
     </div>
 </div>
 
@@ -111,54 +99,80 @@
 
 
 <script>
-    // ── CART LOGIC ──
+    // ── CART LOGIC (with localStorage + remove) ──
     const cartIcon = document.querySelector('.cart-icon');
     const cartSidebar = document.getElementById('cart-sidebar');
     const closeCart = document.getElementById('close-cart');
     const cartItemsList = document.getElementById('cart-items-list');
     const cartCountElement = document.getElementById('cart-count');
     const cartTotalElement = document.getElementById('cart-total-price');
-    
-    let cart = [];
 
-    cartIcon.addEventListener('click', () => {
-        cartSidebar.classList.add('active');
-    });
+    // Load cart from localStorage so it survives page changes
+    let cart = JSON.parse(localStorage.getItem('divineart_cart')) || [];
 
-    closeCart.addEventListener('click', () => {
-        cartSidebar.classList.remove('active');
-    });
+    // Show cart count on load
+    updateCartUI();
 
+    cartIcon.addEventListener('click', () => cartSidebar.classList.add('active'));
+    closeCart.addEventListener('click', () => cartSidebar.classList.remove('active'));
+
+    // Add to cart
     document.querySelectorAll('.add-to-cart').forEach(button => {
         button.addEventListener('click', () => {
-            const card = button.parentElement;
+            const card = button.closest('.product-card');
             const productName = card.querySelector('h3').innerText;
             const priceText = card.querySelector('.price').innerText;
             const productPrice = parseInt(priceText.replace(/[^\d]/g, ''));
             cart.push({ name: productName, price: productPrice });
+            saveCart();
             updateCartUI();
+
+            // Brief button feedback
+            button.innerText = '✓ Added';
+            button.style.backgroundColor = '#2e7d32';
+            setTimeout(() => {
+                button.innerText = 'Add to Cart';
+                button.style.backgroundColor = '';
+            }, 1200);
         });
     });
+
+    // Remove one item by index
+    function removeItem(index) {
+        cart.splice(index, 1);
+        saveCart();
+        updateCartUI();
+    }
+
+    // Save to localStorage
+    function saveCart() {
+        localStorage.setItem('divineart_cart', JSON.stringify(cart));
+    }
 
     function updateCartUI() {
         cartCountElement.innerText = cart.length;
         cartItemsList.innerHTML = '';
         let totalSum = 0;
 
-        cart.forEach((item) => {
-            const itemDiv = document.createElement('div');
-            itemDiv.style.padding = "10px";
-            itemDiv.style.borderBottom = "1px solid #eee";
-            itemDiv.innerHTML = `<strong>${item.name}</strong><br>KSh ${item.price.toLocaleString()}`;
-            cartItemsList.appendChild(itemDiv);
-            totalSum += item.price;
-        });
+        if (cart.length === 0) {
+            cartItemsList.innerHTML = '<p style="padding:20px; color:#aaa;">Your cart is empty</p>';
+        } else {
+            cart.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'cart-item';
+                itemDiv.innerHTML = `
+                    <div class="cart-item-info">
+                        <strong>${item.name}</strong>
+                        <span>KSh ${item.price.toLocaleString()}</span>
+                    </div>
+                    <button class="cart-item-remove" onclick="removeItem(${index})" title="Remove">✕</button>
+                `;
+                cartItemsList.appendChild(itemDiv);
+                totalSum += item.price;
+            });
+        }
 
         cartTotalElement.innerText = totalSum.toLocaleString();
-
-        if (cart.length === 0) {
-            cartItemsList.innerHTML = '<p style="padding:20px;">Your cart is empty</p>';
-        }
     }
 
     // ── HAMBURGER MENU LOGIC ──
@@ -170,7 +184,6 @@
         navLinks.classList.toggle('open');
     });
 
-    // Close menu when a nav link is clicked
     navLinks.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', () => {
             hamburgerBtn.classList.remove('open');
