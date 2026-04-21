@@ -11,24 +11,30 @@
 
 
     <nav class="navbar">
-        <div class="logo">Divine<span>Art</span></div>
+        <div class="logo">Divine<span>Art</span>  </div>
+<br>
+<div id="company-name">Construction & Suppliers </div>
+
+        
         <ul class="nav-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Categories</a></li>
-            <li><a href="#">Orders</a></li>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="categories.html">Categories</a></li>
+            <li ><a href="#main-footer">Contact us</a></li> <!--added id main-footer so when clicked it moves to bottom where contact info is-->
         </ul>
 
 
         <style>
 .cart-icon {
 cursor: pointer;
+ 
 }
             
         </style>
         <div class="cart-icon">
 
-           <p  style="font-size: 20px;" > 🛒 <span id="cart-count">0</span></p>
+           <p  style="font-size: 20px;" >Cart 🛒 <span id="cart-count">0</span></p>
         </div>
+
     </nav>
 
 <section class="hero">
@@ -41,6 +47,9 @@ cursor: pointer;
         </div>
     </div>
 </section>
+
+
+
 
 <div class="products-section" id="products">
     <h2>Our Products</h2>
@@ -63,9 +72,9 @@ cursor: pointer;
         </div>
 
         <div class="product-card">
-            <img src="https://images.pexels.com/photos/1029243/pexels-photo-1029243.jpeg" alt="Bricks">
-            <h3>Machine Cut Stones</h3>
-            <p>Quality 9x9 stones available for walling and foundation.</p>
+            <img src="https://images.pexels.com/photos/6764238/pexels-photo-6764238.jpeg" alt="paints">
+            <h3>Paints </h3>
+            <p>Quality paints for all your interior and exterior needs.</p>
             <p class="price">KSh 45</p>
             <button class="add-to-cart">Add to Cart</button>
         </div>
@@ -82,6 +91,7 @@ cursor: pointer;
         <h2>Your Cart</h2>
         <button id="close-cart">✕</button>
     </div>
+    
     <div id="cart-items-list">
         <p style="padding: 20px;">Your cart is empty</p>
     </div>
@@ -98,6 +108,7 @@ cursor: pointer;
     const closeCart = document.getElementById('close-cart');
     const cartItemsList = document.getElementById('cart-items-list');
     const cartCountElement = document.getElementById('cart-count');
+    const cartTotalElement = document.getElementById('cart-total-price');
     
     let cart = [];
 
@@ -110,33 +121,51 @@ cursor: pointer;
         cartSidebar.classList.remove('active');
     });
 
-    // 2. Add Item Function
+    // 2. The Logic to Add Items
     document.querySelectorAll('.add-to-cart').forEach(button => {
         button.addEventListener('click', () => {
             const card = button.parentElement;
             const productName = card.querySelector('h3').innerText;
-            const productPrice = card.querySelector('.price').innerText;
+            
+            // Get the price text (e.g., "KSh 750")
+            const priceText = card.querySelector('.price').innerText;
+            
+            // CLEANING THE PRICE:
+            // This removes "KSh" and "," so "KSh 1,200" becomes "1200"
+            const productPrice = parseInt(priceText.replace(/[^\d]/g, ''));
 
-            // Add to array
+            // Add to our list (array)
             cart.push({ name: productName, price: productPrice });
             
             updateCartUI();
         });
     });
 
+    // 3. Updating the Sidebar and Total
     function updateCartUI() {
-        // Update Count
+        // Update the red/maroon count number on the navbar
         cartCountElement.innerText = cart.length;
 
-        // Update List
-        cartItemsList.innerHTML = ''; // Clear "Empty" message
-        cart.forEach((item, index) => {
+        // Clear the sidebar so we can redraw it
+        cartItemsList.innerHTML = '';
+        let totalSum = 0;
+
+        cart.forEach((item) => {
+            // Create a new div for each item
             const itemDiv = document.createElement('div');
-            itemDiv.style.padding = "15px";
+            itemDiv.style.padding = "10px";
             itemDiv.style.borderBottom = "1px solid #eee";
-            itemDiv.innerHTML = `<strong>${item.name}</strong> - ${item.price}`;
+            itemDiv.innerHTML = `<strong>${item.name}</strong><br>KSh ${item.price.toLocaleString()}`;
+            
             cartItemsList.appendChild(itemDiv);
+            
+            // Add this item's price to the running total
+            totalSum += item.price;
         });
+
+        // Update the Total Price on the screen
+        // .toLocaleString() adds the commas back for humans to read (e.g., 1,200)
+        cartTotalElement.innerText = totalSum.toLocaleString();
 
         if (cart.length === 0) {
             cartItemsList.innerHTML = '<p style="padding:20px;">Your cart is empty</p>';
@@ -144,5 +173,211 @@ cursor: pointer;
     }
 </script>
 
+
+
+<script>
+    const navCategories = document.getElementById('nav-categories');
+    const heroSection = document.querySelector('.hero');
+    const categoriesView = document.getElementById('categories-view');
+    const productSection = document.querySelector('.products-section');
+
+    // 1. When clicking "Categories" in Navbar
+    navCategories.addEventListener('click', (e) => {
+        e.preventDefault(); // Stop page refresh
+        heroSection.style.display = 'none'; // Hide Hero
+        categoriesView.style.display = 'block'; // Show Category Tab
+        
+        // Scroll to the categories view smoothly
+        categoriesView.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // 2. Function to filter and show products
+    function filterByCategory(category) {
+        // Show the product section in case it was hidden
+        productSection.style.display = 'block';
+        
+        const allProducts = document.querySelectorAll('.product-card');
+        
+        allProducts.forEach(card => {
+            const cardCategory = card.getAttribute('data-category');
+            if (category === 'all' || cardCategory === category) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Scroll to products after picking a category
+        productSection.scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+
+
+
+
+
+
+<style>
+  footer{
+    background-color: rgb(0, 0, 0);
+    text-align: center;
+    padding: 10px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    color: white;
+  }
+</style>
+ 
+<style>
+#main-footer {
+  background-color: #000; /* Solid black like the image */
+  color: #fff;
+  padding: 60px 20px 20px 20px;
+  font-family: Arial, sans-serif;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  /* Creates 4 equal columns on desktop */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+  gap: 40px;
+}
+
+.footer-col h3 {
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 25px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.footer-col p {
+  font-size: 14px;
+  color: #bbb; /* Dimmer text for secondary info */
+  line-height: 1.8;
+}
+
+.footer-col .phone {
+  font-weight: bold;
+  color: #fff;
+  font-size: 18px;
+  margin-top: 15px;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li {
+  margin-bottom: 12px;
+}
+
+.footer-links a {
+  color: #bbb;
+  text-decoration: none;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.footer-links a:hover {
+  color: #d2691e; /* Savanna Orange on hover */
+  padding-left: 5px;
+}
+
+.social-icons a {
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+  border: 1px solid #555;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 35px;
+  margin-right: 10px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.footer-bottom {
+  text-align: center;
+  border-top: 1px solid #222;
+  margin-top: 50px;
+  padding-top: 20px;
+  font-size: 13px;
+  color: #777;
+}
+
+/* Mobile responsive fix */
+@media (max-width: 600px) {
+  .footer-container {
+    grid-template-columns: 1fr; /* Stack columns on phone */
+    text-align: center;
+  }
+}
+
+</style>
+
+
+<footer id="main-footer">
+  <div class="footer-container">
+    <div class="footer-col">
+      <h3>ODYSSEY TOUR & TRAVELS</h3>
+      <p>Your trusted partner in construction and building materials. Quality products, competitive prices, and reliable delivery across Kenya</p>
+    </div>
+
+    <div class="footer-col">
+      <h3>KENYA'S LEADING TOUR COMPANY</h3>
+      <p>Email: info@odysseytravel.com</p>
+      <p>Nairobi, Kenya</p>
+      <p class="phone">PHONE: +254 711 988 988</p>
+    </div>
+
+    <div class="footer-col">
+      <h3>QUICK ACCESS</h3>
+      <ul class="footer-links">
+        <li><a href="Toursdashboard.html">Home</a></li>
+        <li><a href="destinations.php">All Destinations</a></li>
+        <li><a href="maasai-mara.php">Maasai Mara</a></li>
+        <li><a href="contact.php">Contact Us</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h3>FOLLOW US</h3>
+      <p>Join thousands of followers on our social platforms for the latest safari deals.</p>
+      <div class="social-icons">
+        <a href="#">FB</a>
+         <a href="#">TW</a>
+        <a href="#">IG</a>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; <span id="year"></span> Odyssey Travel Companion | All Rights Reserved | Developed by Lex Corp</p>
+  </div>
+</footer>
+
+
+
+
+
+
+<footer>
+  &copy;  <span id="year"></span> Odyssey Travel Companion <br> Developed by Lex Corp
+  <script>
+  // Get the current year
+  document.getElementById("year").innerHTML = new Date().getFullYear();
+</script>
+
+</footer>
+
+
+
+</html>
 </body>
 </html>
