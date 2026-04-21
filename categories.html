@@ -451,7 +451,9 @@
     const cartCountElement = document.getElementById('cart-count');
     const cartTotalElement = document.getElementById('cart-total-price');
 
-    let cart = [];
+    // Load cart from localStorage so count survives page navigation
+    let cart = JSON.parse(localStorage.getItem('divineart_cart')) || [];
+    updateCartUI();
 
     cartIcon.addEventListener('click', () => cartSidebar.classList.add('active'));
     closeCart.addEventListener('click', () => cartSidebar.classList.remove('active'));
@@ -463,29 +465,52 @@
             const priceText = card.querySelector('.price').innerText;
             const productPrice = parseInt(priceText.replace(/[^\d]/g, ''));
             cart.push({ name: productName, price: productPrice });
+            saveCart();
             updateCartUI();
+
+            button.innerText = '✓ Added';
+            button.style.backgroundColor = '#2e7d32';
+            setTimeout(() => {
+                button.innerText = 'Add to Cart';
+                button.style.backgroundColor = '';
+            }, 1200);
         });
     });
+
+    function removeItem(index) {
+        cart.splice(index, 1);
+        saveCart();
+        updateCartUI();
+    }
+
+    function saveCart() {
+        localStorage.setItem('divineart_cart', JSON.stringify(cart));
+    }
 
     function updateCartUI() {
         cartCountElement.innerText = cart.length;
         cartItemsList.innerHTML = '';
         let totalSum = 0;
 
-        cart.forEach(item => {
-            const itemDiv = document.createElement('div');
-            itemDiv.style.padding = "10px";
-            itemDiv.style.borderBottom = "1px solid #eee";
-            itemDiv.innerHTML = `<strong>${item.name}</strong><br>KSh ${item.price.toLocaleString()}`;
-            cartItemsList.appendChild(itemDiv);
-            totalSum += item.price;
-        });
+        if (cart.length === 0) {
+            cartItemsList.innerHTML = '<p style="padding:20px; color:#aaa;">Your cart is empty</p>';
+        } else {
+            cart.forEach((item, index) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'cart-item';
+                itemDiv.innerHTML = `
+                    <div class="cart-item-info">
+                        <strong>${item.name}</strong>
+                        <span>KSh ${item.price.toLocaleString()}</span>
+                    </div>
+                    <button class="cart-item-remove" onclick="removeItem(${index})" title="Remove">✕</button>
+                `;
+                cartItemsList.appendChild(itemDiv);
+                totalSum += item.price;
+            });
+        }
 
         cartTotalElement.innerText = totalSum.toLocaleString();
-
-        if (cart.length === 0) {
-            cartItemsList.innerHTML = '<p style="padding:20px;">Your cart is empty</p>';
-        }
     }
 
     // ── CATEGORY FILTER ──
