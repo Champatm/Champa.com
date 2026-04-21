@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories - Divine Art Construction</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Divine<span>Art</span></div>
+<br>
+<div id="company-name">Construction & Suppliers </div>
+
+        <ul class="nav-links">
+            <li><a href="index.html" id="homelink">Home</a></li>
+            <li><a href="categories.html"  id="categorylink">Categories</a></li>
+            <li><a href="#" id="contactlink">Contact us</a></li>
+        </ul>
+ <style>
+.cart-icon {
+cursor: pointer;
+ 
+}
+            
+        </style>
+        <div class="cart-icon">
+
+           <p  style="font-size: 20px;" >Cart 🛒 <span id="cart-count">0</span></p>
+        </div>
+
+    </nav>
+
+
+
+
+
+    <div class="categories-page-container">
+        <h1 style="text-align: center; margin-top: 30px; color: maroon;">Material Groupings</h1>
+
+        <section class="category-group">
+            <h2 class="group-title">🏗️ Cement & Masonry</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <img src="https://images.pexels.com/photos/29519165/pexels-photo-29519165.jpeg" alt="Bamburi">
+                    <h3>Bamburi Cement</h3>
+                    <p class="price">KSh 750</p>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+                <div class="product-card">
+                    <img src="https://images.pexels.com/photos/29519165/pexels-photo-29519165.jpeg" alt="Simba">
+                    <h3>Simba Cement</h3>
+                    <p class="price">KSh 730</p>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="category-group">
+            <h2 class="group-title">🎨 Paints & Finishes</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <img src="https://images.pexels.com/photos/6764238/pexels-photo-6764238.jpeg" alt="paints">
+                    <h3>Crown Solo White</h3>
+                    <p class="price">KSh 2,800</p>
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+
+    
+
+<div id="cart-sidebar" class="sidebar">
+    <div class="sidebar-header">
+        <h2>Your Cart</h2>
+        <button id="close-cart">✕</button>
+    </div>
+    
+    <div id="cart-items-list">
+        <p style="padding: 20px;">Your cart is empty</p>
+    </div>
+    <div class="sidebar-footer">
+        <h3>Total: KSh <span id="cart-total-price">0</span></h3>
+        <button class="checkout-btn">Checkout via WhatsApp</button>
+    </div>
+</div>
+
+
+<script>
+    const cartIcon = document.querySelector('.cart-icon');
+    const cartSidebar = document.getElementById('cart-sidebar');
+    const closeCart = document.getElementById('close-cart');
+    const cartItemsList = document.getElementById('cart-items-list');
+    const cartCountElement = document.getElementById('cart-count');
+    const cartTotalElement = document.getElementById('cart-total-price');
+    
+    let cart = [];
+
+    // 1. Open/Close Cart
+    cartIcon.addEventListener('click', () => {
+        cartSidebar.classList.add('active');
+    });
+
+    closeCart.addEventListener('click', () => {
+        cartSidebar.classList.remove('active');
+    });
+
+    // 2. The Logic to Add Items
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', () => {
+            const card = button.parentElement;
+            const productName = card.querySelector('h3').innerText;
+            
+            // Get the price text (e.g., "KSh 750")
+            const priceText = card.querySelector('.price').innerText;
+            
+            // CLEANING THE PRICE:
+            // This removes "KSh" and "," so "KSh 1,200" becomes "1200"
+            const productPrice = parseInt(priceText.replace(/[^\d]/g, ''));
+
+            // Add to our list (array)
+            cart.push({ name: productName, price: productPrice });
+            
+            updateCartUI();
+        });
+    });
+
+    // 3. Updating the Sidebar and Total
+    function updateCartUI() {
+        // Update the red/maroon count number on the navbar
+        cartCountElement.innerText = cart.length;
+
+        // Clear the sidebar so we can redraw it
+        cartItemsList.innerHTML = '';
+        let totalSum = 0;
+
+        cart.forEach((item) => {
+            // Create a new div for each item
+            const itemDiv = document.createElement('div');
+            itemDiv.style.padding = "10px";
+            itemDiv.style.borderBottom = "1px solid #eee";
+            itemDiv.innerHTML = `<strong>${item.name}</strong><br>KSh ${item.price.toLocaleString()}`;
+            
+            cartItemsList.appendChild(itemDiv);
+            
+            // Add this item's price to the running total
+            totalSum += item.price;
+        });
+
+        // Update the Total Price on the screen
+        // .toLocaleString() adds the commas back for humans to read (e.g., 1,200)
+        cartTotalElement.innerText = totalSum.toLocaleString();
+
+        if (cart.length === 0) {
+            cartItemsList.innerHTML = '<p style="padding:20px;">Your cart is empty</p>';
+        }
+    }
+</script>
+
+
+
+<script>
+    const navCategories = document.getElementById('nav-categories');
+    const heroSection = document.querySelector('.hero');
+    const categoriesView = document.getElementById('categories-view');
+    const productSection = document.querySelector('.products-section');
+
+    // 1. When clicking "Categories" in Navbar
+    navCategories.addEventListener('click', (e) => {
+        e.preventDefault(); // Stop page refresh
+        heroSection.style.display = 'none'; // Hide Hero
+        categoriesView.style.display = 'block'; // Show Category Tab
+        
+        // Scroll to the categories view smoothly
+        categoriesView.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // 2. Function to filter and show products
+    function filterByCategory(category) {
+        // Show the product section in case it was hidden
+        productSection.style.display = 'block';
+        
+        const allProducts = document.querySelectorAll('.product-card');
+        
+        allProducts.forEach(card => {
+            const cardCategory = card.getAttribute('data-category');
+            if (category === 'all' || cardCategory === category) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Scroll to products after picking a category
+        productSection.scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+
+
+
+
+
+    </body>
+</html>
