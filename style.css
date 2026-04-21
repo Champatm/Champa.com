@@ -1,7 +1,7 @@
 /* Basic Reset */
 * {
-    margin: 0;   /* Removes default margin from all elements to ensure consistent spacing across browsers. */
-    padding: 0;  /* Removes default padding from all elements to ensure consistent spacing across browsers. */
+    margin: 0;
+    padding: 0;
     box-sizing: border-box; 
     font-family: Arial, sans-serif; 
 }
@@ -9,6 +9,7 @@
 body {
     background-color: #f4f4f4; 
 }
+
 /* --- DESKTOP NAVIGATION (Default) --- */
 .navbar {
     display: flex;
@@ -40,46 +41,105 @@ body {
     font-weight: bold;
 }
 
-/* --- MOBILE RESPONSIVE FIX --- */
+/* ── HAMBURGER BUTTON ── */
+/* Hidden on desktop, only shows on mobile */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    z-index: 1100;
+}
+
+.hamburger span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    border-radius: 3px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Animate hamburger → X when open */
+.hamburger.open span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+.hamburger.open span:nth-child(2) {
+    opacity: 0;
+}
+.hamburger.open span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+
+/* --- MOBILE RESPONSIVE --- */
 @media screen and (max-width: 768px) {
     .navbar {
-        flex-direction: column; /* Stacks brand above links */
+        flex-wrap: wrap;
         padding: 15px 5%;
         height: auto;
+        position: relative;
     }
 
     .brand-container {
-        text-align: center;
-        margin-bottom: 10px;
+        flex: 1; /* Takes up left side */
     }
 
     .logo {
         font-size: 22px;
     }
 
-    #company-name {
-        font-size: 14px;
+    /* Show the hamburger on mobile */
+    .hamburger {
+        display: flex;
     }
 
-    /* Links and Cart in one row at the bottom */
+    /* Cart stays on the right of the top row */
+    .cart-icon {
+        order: 3;
+    }
+
+    /* Nav links: hidden by default on mobile, drops down when .open is added */
     .nav-links {
+        display: none;           /* Hidden until toggled */
+        flex-direction: column;
         width: 100%;
-        justify-content: center;
-        gap: 15px;
-        padding-top: 10px;
-        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        order: 4;                /* Appears below the top row */
+        background-color: #6b0000; /* Slightly darker maroon for the dropdown */
+        border-radius: 0 0 8px 8px;
+        padding: 10px 0;
+        gap: 0;
+        margin-top: 10px;
+    }
+
+    /* Show the nav links when .open class is applied via JS */
+    .nav-links.open {
+        display: flex;
     }
 
     .nav-links li {
-        margin: 0; /* Clears that left margin from desktop */
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-links li:last-child {
+        border-bottom: none;
     }
 
     .nav-links a {
-        font-size: 13px;
+        display: block;
+        padding: 12px 20px;
+        font-size: 15px;
+        transition: background-color 0.2s;
     }
 
-    .cart-icon {
-        margin-top: 10px;
+    .nav-links a:hover {
+        background-color: rgba(255, 255, 255, 0.1);
     }
 
     .cart-icon p {
@@ -92,88 +152,6 @@ body {
         line-height: 1.2;
     }
 }
-
-
-
-/* 1. Hide the Hamburger on Desktop */
-.menu-icon {
-    display: none;
-    font-size: 30px;
-    cursor: pointer;
-    color: white;
-}
-
-/* 2. Style the Mobile Menu Sidebar */
-.mobile-nav-links {
-    list-style: none;
-    padding: 20px;
-}
-
-.mobile-nav-links li {
-    padding: 15px 0;
-    border-bottom: 1px solid #eee;
-}
-
-.mobile-nav-links a {
-    text-decoration: none;
-    color: maroon;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-/* 3. Mobile Specific Changes */
-@media screen and (max-width: 768px) {
-    .nav-links {
-        display: none; /* Hide the horizontal links on phone */
-    }
-
-    .menu-icon {
-        display: block; /* Show the ☰ button */
-        position: absolute;
-        left: 20px;
-        top: 15px;
-    }
-    
-    .navbar {
-        height: 70px;
-        flex-direction: row; /* Keep logo and cart on one line */
-        justify-content: center;
-    }
-    
-    .brand-container {
-        margin-bottom: 0;
-    }
-}
-
-
-
-#homelink{
-position:absolute;
-right: 500px;
-
-}
-#categorylink{
-    position: absolute;
-    right: 400px;
-}
-
-#contactlink{
-position: absolute;
-right:300px;
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /* Hero Section */
@@ -210,7 +188,7 @@ right:300px;
     display: flex;
     justify-content: center;
     gap: 20px;
-    flex-wrap: wrap; /* This prevents displacement on smaller screens */
+    flex-wrap: wrap;
     margin-top: 30px;
 }
 
@@ -231,7 +209,7 @@ right:300px;
 .product-card img {
     width: 100%;
     height: 200px;
-    object-fit: cover; /* Keeps images from stretching so your product images don't look squashed or stretched. */
+    object-fit: cover;
     border-radius: 5px;
 }
 
@@ -259,22 +237,21 @@ right:300px;
     background-color: #800000;
 }
 
-/* Sidebar hidden off-screen to the right */
+/* Sidebar */
 .sidebar {
     position: fixed;
     top: 0;
-    right: -400px; /* Hidden */
+    right: -400px;
     width: 350px;
     height: 100%;
     background-color: white;
     box-shadow: -5px 0 15px rgba(0,0,0,0.2);
-    transition: 0.4s; /* Smooth slide effect */
+    transition: 0.4s;
     z-index: 2000;
     display: flex;
     flex-direction: column;
 }
 
-/* When this class is added via JS, the cart slides in */
 .sidebar.active {
     right: 0;
 }
@@ -303,7 +280,7 @@ right:300px;
 
 .checkout-btn {
     width: 100%;
-    background-color: #25D366; /* WhatsApp Green */
+    background-color: #25D366;
     color: white;
     padding: 15px;
     border: none;
@@ -312,7 +289,6 @@ right:300px;
     cursor: pointer;
     margin-top: 10px;
 }
-
 
 .category-group {
     padding: 40px 5%;
@@ -332,5 +308,3 @@ right:300px;
     margin: 0 auto;
     background: white;
 }
-
-
