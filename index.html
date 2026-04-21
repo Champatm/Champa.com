@@ -1,263 +1,383 @@
-/* Basic Reset */
-* {
-    margin: 0;   /* Removes default margin from all elements to ensure consistent spacing across browsers. */
-    padding: 0;  /* Removes default padding from all elements to ensure consistent spacing across browsers. */
-    box-sizing: border-box; 
-    font-family: Arial, sans-serif; 
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Divine Art Construction & Suppliers LTD</title>
+    <link rel="stylesheet" href="style.css">
+</head>
 
-body {
-    background-color: #f4f4f4; 
-}
-/* Navigation */
-.navbar {
-    display: flex;
-    flex-direction: column; /* Stack logo above links on mobile */
-    align-items: center;
-    padding: 10px;
-    background-color: maroon;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
+<body>
 
-@media (min-width: 768px) {
-    .navbar {
-        flex-direction: row; /* Go back to horizontal on computers */
-        justify-content: space-between;
-        padding: 10px 5%;
-    }
-}
 
-.brand-container {
-    text-align: center;
-    margin-bottom: 10px;
-}
+    <nav class="navbar">
+        <div class="logo">Divine<span>Art</span>  </div>
+<br>
+<div id="company-name">Construction & Suppliers </div>
 
-.nav-links {
-    display: flex;
-    gap: 15px;
-    font-size: 14px;
-}
+        
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="categories.html">Categories</a></li>
+            <li ><a href="#main-footer">Contact us</a></li> <!--added id main-footer so when clicked it moves to bottom where contact info is-->
+        </ul>
 
+
+        <style>
 .cart-icon {
-    position: absolute; /* Keep cart in the top right corner */
-    right: 15px;
-    top: 15px;
-    font-size: 14px;
+cursor: pointer;
+ 
 }
+            
+        </style>
+        <div class="cart-icon">
 
-#company-name {
-    font-size: 18px;
-    font-weight: bold;
-    color: white;
-    position: absolute;
-    top: 37px; /* Adjust as needed to position below the logo */
-    left: 5%; /* Align with logo */
-}
+           <p  style="font-size: 20px;" >Cart 🛒 <span id="cart-count">0</span></p>
+        </div>
 
-.logo { font-size: 24px;
-       font-weight: bold; 
-       position: absolute;
-       top :10px;
-      left: 5%; 
-}
+    </nav>
 
-.logo span { color: #ffd700; 
+<section class="hero">
+    <div class="hero-content">
+        <h1>Quality Construction Materials Delivered all across Kenya</h1>
+        <p>Premium Cement, Steel, Hardware and more .</p>
+        <div class="hero-buttons">
+            <a href="#products" class="shop-btn">Shop Materials</a>
+            <a href="#" class="quote-btn">Request Quote</a>
+        </div>
+    </div>
+</section>
 
-} /* Golden color for 'Art' to pop against Maroon */
 
-.nav-links { display: flex; 
-    list-style: none; }
+
+
+<div class="products-section" id="products">
+    <h2>Our Products</h2>
+    <div class="products-grid">
+        
+        <div class="product-card">
+            <img src="https://images.pexels.com/photos/29519165/pexels-photo-29519165.jpeg" alt="Cement">
+            <h3>Bamburi Cement</h3>
+            <p>High-quality 50kg cement for all your construction needs.</p>
+            <p class="price">KSh 750</p>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <img src="https://images.pexels.com/photos/11891953/pexels-photo-11891953.jpeg" alt="Steel">
+            <h3>Reinforcement Steel</h3>
+            <p>Durable steel bars for strong and lasting structures.</p>
+            <p class="price">KSh 1,200</p>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+
+        <div class="product-card">
+            <img src="https://images.pexels.com/photos/6764238/pexels-photo-6764238.jpeg" alt="paints">
+            <h3>Paints </h3>
+            <p>Quality paints for all your interior and exterior needs.</p>
+            <p class="price">KSh 45</p>
+            <button class="add-to-cart">Add to Cart</button>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+<div id="cart-sidebar" class="sidebar">
+    <div class="sidebar-header">
+        <h2>Your Cart</h2>
+        <button id="close-cart">✕</button>
+    </div>
     
-    .nav-links li { margin-left: 20px; }
+    <div id="cart-items-list">
+        <p style="padding: 20px;">Your cart is empty</p>
+    </div>
+    <div class="sidebar-footer">
+        <h3>Total: KSh <span id="cart-total-price">0</span></h3>
+        <button class="checkout-btn">Checkout via WhatsApp</button>
+    </div>
+</div>
 
-.nav-links a { color: white; text-decoration: none; font-weight: bold; }
+
+<script>
+    const cartIcon = document.querySelector('.cart-icon');
+    const cartSidebar = document.getElementById('cart-sidebar');
+    const closeCart = document.getElementById('close-cart');
+    const cartItemsList = document.getElementById('cart-items-list');
+    const cartCountElement = document.getElementById('cart-count');
+    const cartTotalElement = document.getElementById('cart-total-price');
+    
+    let cart = [];
+
+    // 1. Open/Close Cart
+    cartIcon.addEventListener('click', () => {
+        cartSidebar.classList.add('active');
+    });
+
+    closeCart.addEventListener('click', () => {
+        cartSidebar.classList.remove('active');
+    });
+
+    // 2. The Logic to Add Items
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', () => {
+            const card = button.parentElement;
+            const productName = card.querySelector('h3').innerText;
+            
+            // Get the price text (e.g., "KSh 750")
+            const priceText = card.querySelector('.price').innerText;
+            
+            // CLEANING THE PRICE:
+            // This removes "KSh" and "," so "KSh 1,200" becomes "1200"
+            const productPrice = parseInt(priceText.replace(/[^\d]/g, ''));
+
+            // Add to our list (array)
+            cart.push({ name: productName, price: productPrice });
+            
+            updateCartUI();
+        });
+    });
+
+    // 3. Updating the Sidebar and Total
+    function updateCartUI() {
+        // Update the red/maroon count number on the navbar
+        cartCountElement.innerText = cart.length;
+
+        // Clear the sidebar so we can redraw it
+        cartItemsList.innerHTML = '';
+        let totalSum = 0;
+
+        cart.forEach((item) => {
+            // Create a new div for each item
+            const itemDiv = document.createElement('div');
+            itemDiv.style.padding = "10px";
+            itemDiv.style.borderBottom = "1px solid #eee";
+            itemDiv.innerHTML = `<strong>${item.name}</strong><br>KSh ${item.price.toLocaleString()}`;
+            
+            cartItemsList.appendChild(itemDiv);
+            
+            // Add this item's price to the running total
+            totalSum += item.price;
+        });
+
+        // Update the Total Price on the screen
+        // .toLocaleString() adds the commas back for humans to read (e.g., 1,200)
+        cartTotalElement.innerText = totalSum.toLocaleString();
+
+        if (cart.length === 0) {
+            cartItemsList.innerHTML = '<p style="padding:20px;">Your cart is empty</p>';
+        }
+    }
+</script>
 
 
 
-#homelink{
-position:absolute;
-right: 500px;
+<script>
+    const navCategories = document.getElementById('nav-categories');
+    const heroSection = document.querySelector('.hero');
+    const categoriesView = document.getElementById('categories-view');
+    const productSection = document.querySelector('.products-section');
 
-}
-#categorylink{
-    position: absolute;
-    right: 400px;
-}
+    // 1. When clicking "Categories" in Navbar
+    navCategories.addEventListener('click', (e) => {
+        e.preventDefault(); // Stop page refresh
+        heroSection.style.display = 'none'; // Hide Hero
+        categoriesView.style.display = 'block'; // Show Category Tab
+        
+        // Scroll to the categories view smoothly
+        categoriesView.scrollIntoView({ behavior: 'smooth' });
+    });
 
-#contactlink{
-position: absolute;
-right:300px;
+    // 2. Function to filter and show products
+    function filterByCategory(category) {
+        // Show the product section in case it was hidden
+        productSection.style.display = 'block';
+        
+        const allProducts = document.querySelectorAll('.product-card');
+        
+        allProducts.forEach(card => {
+            const cardCategory = card.getAttribute('data-category');
+            if (category === 'all' || cardCategory === category) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
 
-}
+        // Scroll to products after picking a category
+        productSection.scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
 
-/* Hero Section */
-.hero {
-    height: 50vh; /* Shorter height for mobile */
-    padding: 20px;
-}
 
-.hero h1 {
-    font-size: 24px; /* Smaller font for mobile */
-    line-height: 1.2;
-}
 
-.hero p {
-    font-size: 14px;
-}
 
-.hero-buttons {
-    display: flex;
-    flex-direction: column; /* Stack buttons on top of each other */
-    gap: 10px;
-    align-items: center;
-}
 
-@media (min-width: 768px) {
-    .hero h1 { font-size: 40px; }
-    .hero-buttons { flex-direction: row; }
-}
 
-.shop-btn {
-    background-color: #FF8C00;
-    color: white;
-    padding: 12px 25px;
-    text-decoration: none;
-    border-radius: 5px;
-    display: inline-block;
-    margin-top: 15px;
-}
-
-/* Products Section */
-.products-section {
-    padding: 50px 5%;
+<style>
+  footer{
+    background-color: rgb(0, 0, 0);
     text-align: center;
-}
-
-.products-grid {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    flex-wrap: wrap; /* This prevents displacement on smaller screens */
-    margin-top: 30px;
-}
-
-.product-card {
-    background: white;
-    width: 300px;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    transition: 0.3s;
-}
-
-.product-card:hover {
-    transform: translateY(-5px); 
-    transition: transform 0.4s;
-}
-
-.product-card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover; /* Keeps images from stretching so your product images don't look squashed or stretched. */
-    border-radius: 5px;
-}
-
-.product-card h3 { margin: 15px 0; color: maroon; }
-
-.price {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 15px;
-}
-
-.add-to-cart {
-    background-color: maroon;
+    padding: 10px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
     color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 100%;
-    font-weight: bold;
+  }
+</style>
+ 
+<style>
+#main-footer {
+  background-color: #000; /* Solid black like the image */
+  color: #fff;
+  padding: 60px 20px 20px 20px;
+  font-family: Arial, sans-serif;
 }
 
-.add-to-cart:hover {
-    background-color: #800000;
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  /* Creates 4 equal columns on desktop */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+  gap: 40px;
 }
 
-/* Sidebar hidden off-screen to the right */
-.sidebar {
-    position: fixed;
-    top: 0;
-    right: -400px; /* Hidden */
-    width: 350px;
-    height: 100%;
-    background-color: white;
-    box-shadow: -5px 0 15px rgba(0,0,0,0.2);
-    transition: 0.4s; /* Smooth slide effect */
-    z-index: 2000;
-    display: flex;
-    flex-direction: column;
+.footer-col h3 {
+  font-size: 16px;
+  color: #fff;
+  margin-bottom: 25px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
-/* When this class is added via JS, the cart slides in */
-.sidebar.active {
-    right: 0;
+.footer-col p {
+  font-size: 14px;
+  color: #bbb; /* Dimmer text for secondary info */
+  line-height: 1.8;
 }
 
-.sidebar-header {
-    background-color: maroon;
-    color: white;
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.footer-col .phone {
+  font-weight: bold;
+  color: #fff;
+  font-size: 18px;
+  margin-top: 15px;
 }
 
-#close-cart {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 30px;
-    cursor: pointer;
+.footer-links {
+  list-style: none;
+  padding: 0;
 }
 
-.sidebar-footer {
-    padding: 20px;
-    border-top: 1px solid #ddd;
+.footer-links li {
+  margin-bottom: 12px;
 }
 
-.checkout-btn {
-    width: 100%;
-    background-color: #25D366; /* WhatsApp Green */
-    color: white;
-    padding: 15px;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
+.footer-links a {
+  color: #bbb;
+  text-decoration: none;
+  font-size: 14px;
+  transition: 0.3s;
 }
 
-
-.category-group {
-    padding: 40px 5%;
-    border-bottom: 1px solid #ddd;
+.footer-links a:hover {
+  color: #d2691e; /* Savanna Orange on hover */
+  padding-left: 5px;
 }
 
-.group-title {
-    color: maroon;
-    font-size: 24px;
-    margin-bottom: 20px;
-    border-left: 5px solid maroon;
-    padding-left: 15px;
+.social-icons a {
+  display: inline-block;
+  width: 35px;
+  height: 35px;
+  border: 1px solid #555;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 35px;
+  margin-right: 10px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 12px;
 }
 
-.categories-page-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    background: white;
+.footer-bottom {
+  text-align: center;
+  border-top: 1px solid #222;
+  margin-top: 50px;
+  padding-top: 20px;
+  font-size: 13px;
+  color: #777;
 }
+
+/* Mobile responsive fix */
+@media (max-width: 600px) {
+  .footer-container {
+    grid-template-columns: 1fr; /* Stack columns on phone */
+    text-align: center;
+  }
+}
+
+</style>
+
+
+<footer id="main-footer">
+  <div class="footer-container">
+    <div class="footer-col">
+      <h3>ODYSSEY TOUR & TRAVELS</h3>
+      <p>Your trusted partner in construction and building materials. Quality products, competitive prices, and reliable delivery across Kenya</p>
+    </div>
+
+    <div class="footer-col">
+      <h3>KENYA'S LEADING TOUR COMPANY</h3>
+      <p>Email: info@odysseytravel.com</p>
+      <p>Nairobi, Kenya</p>
+      <p class="phone">PHONE: +254 711 988 988</p>
+    </div>
+
+    <div class="footer-col">
+      <h3>QUICK ACCESS</h3>
+      <ul class="footer-links">
+        <li><a href="Toursdashboard.html">Home</a></li>
+        <li><a href="destinations.php">All Destinations</a></li>
+        <li><a href="maasai-mara.php">Maasai Mara</a></li>
+        <li><a href="contact.php">Contact Us</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h3>FOLLOW US</h3>
+      <p>Join thousands of followers on our social platforms for the latest safari deals.</p>
+      <div class="social-icons">
+        <a href="#">FB</a>
+         <a href="#">TW</a>
+        <a href="#">IG</a>
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; <span id="year"></span> Odyssey Travel Companion | All Rights Reserved | Developed by Lex Corp</p>
+  </div>
+</footer>
+
+
+
+
+
+
+<footer>
+  &copy;  <span id="year"></span> Odyssey Travel Companion <br> Developed by Lex Corp
+  <script>
+  // Get the current year
+  document.getElementById("year").innerHTML = new Date().getFullYear();
+</script>
+
+</footer>
+
+
+
+</html>
+</body>
+</html>
