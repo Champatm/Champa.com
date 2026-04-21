@@ -20,7 +20,7 @@ body {
     position: sticky;
     top: 0;
     z-index: 1000;
-    min-height: 80px;
+    min-height: 70px;
 }
 
 .brand-container {
@@ -95,6 +95,58 @@ body {
 
 
 
+/* 1. Hide the Hamburger on Desktop */
+.menu-icon {
+    display: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: white;
+}
+
+/* 2. Style the Mobile Menu Sidebar */
+.mobile-nav-links {
+    list-style: none;
+    padding: 20px;
+}
+
+.mobile-nav-links li {
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.mobile-nav-links a {
+    text-decoration: none;
+    color: maroon;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* 3. Mobile Specific Changes */
+@media screen and (max-width: 768px) {
+    .nav-links {
+        display: none; /* Hide the horizontal links on phone */
+    }
+
+    .menu-icon {
+        display: block; /* Show the ☰ button */
+        position: absolute;
+        left: 20px;
+        top: 15px;
+    }
+    
+    .navbar {
+        height: 70px;
+        flex-direction: row; /* Keep logo and cart on one line */
+        justify-content: center;
+    }
+    
+    .brand-container {
+        margin-bottom: 0;
+    }
+}
+
+
+
 #homelink{
 position:absolute;
 right: 500px;
@@ -110,6 +162,18 @@ position: absolute;
 right:300px;
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* Hero Section */
@@ -268,3 +332,5 @@ right:300px;
     margin: 0 auto;
     background: white;
 }
+
+
