@@ -9,25 +9,59 @@
 body {
     background-color: #f4f4f4; 
 }
-
 /* Navigation */
 .navbar {
-    display: flex; /* Flexbox for horizontal layout of nav items */
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    justify-content: space-between; 
+    display: flex;
+    flex-direction: column; /* Stack logo above links on mobile */
     align-items: center;
-    padding: 15px 5%;
+    padding: 10px;
     background-color: maroon;
-    color: white;
     position: sticky;
     top: 0;
     z-index: 1000;
 }
 
+@media (min-width: 768px) {
+    .navbar {
+        flex-direction: row; /* Go back to horizontal on computers */
+        justify-content: space-between;
+        padding: 10px 5%;
+    }
+}
+
+.brand-container {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 15px;
+    font-size: 14px;
+}
+
+.cart-icon {
+    position: absolute; /* Keep cart in the top right corner */
+    right: 15px;
+    top: 15px;
+    font-size: 14px;
+}
+
+#company-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    position: absolute;
+    top: 37px; /* Adjust as needed to position below the logo */
+    left: 5%; /* Align with logo */
+}
+
 .logo { font-size: 24px;
-       font-weight: bold; }
+       font-weight: bold; 
+       position: absolute;
+       top :10px;
+      left: 5%; 
+}
 
 .logo span { color: #ffd700; 
 
@@ -35,23 +69,55 @@ body {
 
 .nav-links { display: flex; 
     list-style: none; }
+    
     .nav-links li { margin-left: 20px; }
 
 .nav-links a { color: white; text-decoration: none; font-weight: bold; }
 
-/* Hero Section */
-.hero {
-    height: 60vh;
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
-                url('https://images.pexels.com/photos/159306/construction-site-build-construction-work-159306.jpeg') center/cover;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: white;
+
+
+#homelink{
+position:absolute;
+right: 500px;
+
+}
+#categorylink{
+    position: absolute;
+    right: 400px;
 }
 
-.hero h1 { font-size: 40px; margin-bottom: 10px; }
+#contactlink{
+position: absolute;
+right:300px;
+
+}
+
+/* Hero Section */
+.hero {
+    height: 50vh; /* Shorter height for mobile */
+    padding: 20px;
+}
+
+.hero h1 {
+    font-size: 24px; /* Smaller font for mobile */
+    line-height: 1.2;
+}
+
+.hero p {
+    font-size: 14px;
+}
+
+.hero-buttons {
+    display: flex;
+    flex-direction: column; /* Stack buttons on top of each other */
+    gap: 10px;
+    align-items: center;
+}
+
+@media (min-width: 768px) {
+    .hero h1 { font-size: 40px; }
+    .hero-buttons { flex-direction: row; }
+}
 
 .shop-btn {
     background-color: #FF8C00;
@@ -174,4 +240,24 @@ body {
     font-weight: bold;
     cursor: pointer;
     margin-top: 10px;
+}
+
+
+.category-group {
+    padding: 40px 5%;
+    border-bottom: 1px solid #ddd;
+}
+
+.group-title {
+    color: maroon;
+    font-size: 24px;
+    margin-bottom: 20px;
+    border-left: 5px solid maroon;
+    padding-left: 15px;
+}
+
+.categories-page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
 }
