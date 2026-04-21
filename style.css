@@ -79,14 +79,13 @@ body {
 /* --- MOBILE RESPONSIVE --- */
 @media screen and (max-width: 768px) {
     .navbar {
-        flex-wrap: wrap;
         padding: 15px 5%;
         height: auto;
-        position: relative;
+        position: relative; /* Anchor for the absolutely positioned dropdown */
     }
 
     .brand-container {
-        flex: 1; /* Takes up left side */
+        flex: 1; /* Takes up left side, pushing hamburger & cart to the right */
     }
 
     .logo {
@@ -98,22 +97,20 @@ body {
         display: flex;
     }
 
-    /* Cart stays on the right of the top row */
-    .cart-icon {
-        order: 3;
-    }
-
-    /* Nav links: hidden by default on mobile, drops down when .open is added */
+    /* Nav links: absolutely positioned dropdown that floats over the page */
     .nav-links {
-        display: none;           /* Hidden until toggled */
+        display: none;                  /* Hidden until toggled */
         flex-direction: column;
-        width: 100%;
-        order: 4;                /* Appears below the top row */
-        background-color: #6b0000; /* Slightly darker maroon for the dropdown */
+        position: absolute;             /* Lifts out of normal flow */
+        top: 100%;                      /* Sits flush below the navbar */
+        left: 0;
+        width: 100%;                    /* Full navbar width */
+        background-color: #6b0000;      /* Same darker maroon */
         border-radius: 0 0 8px 8px;
         padding: 10px 0;
         gap: 0;
-        margin-top: 10px;
+        z-index: 999;                   /* Below cart sidebar (2000) but above page */
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
     }
 
     /* Show the nav links when .open class is applied via JS */
@@ -209,8 +206,10 @@ body {
 .product-card img {
     width: 100%;
     height: 200px;
-    object-fit: cover;
+    object-fit: contain;      /* Shows the full image without cropping */
+    background-color: #f9f9f9; /* Light grey fill for the empty sides */
     border-radius: 5px;
+    padding: 10px;             /* Breathing room around the product */
 }
 
 .product-card h3 { margin: 15px 0; color: maroon; }
@@ -273,9 +272,54 @@ body {
     cursor: pointer;
 }
 
+#cart-items-list {
+    flex: 1;           /* Takes all available space between header and footer */
+    overflow-y: auto;  /* Scrollable when items overflow */
+}
+
 .sidebar-footer {
     padding: 20px;
     border-top: 1px solid #ddd;
+    flex-shrink: 0;    /* Never shrinks — always visible at the bottom */
+}
+
+/* Remove button inside each cart item */
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.cart-item-info {
+    flex: 1;
+}
+
+.cart-item-info strong {
+    display: block;
+    font-size: 14px;
+    color: #222;
+}
+
+.cart-item-info span {
+    font-size: 13px;
+    color: #666;
+}
+
+.cart-item-remove {
+    background: none;
+    border: none;
+    color: #bbb;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 5px;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.cart-item-remove:hover {
+    color: maroon;
 }
 
 .checkout-btn {
